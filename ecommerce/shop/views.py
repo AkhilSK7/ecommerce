@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.views import View
 from shop.models import Category,Product
-from shop.forms import RegisterForm,LoginForm
+from shop.forms import RegisterForm,LoginForm,AddproductForm,AddcategoryForm,AddstockForm
 from django.contrib import messages
 from django.contrib.auth import authenticate,login,logout
 
@@ -68,3 +68,44 @@ class Logoutview(View):
     def get(self,request):
         logout(request)
         return redirect('shop:login')
+
+class Addproductview(View):
+    def get(self,request):
+        form_instance=AddproductForm()
+        context={'form':form_instance}
+        return render(request,"Addproducts.html",context)
+    def post(self,request):
+        form_instance=AddproductForm(request.POST,request.FILES)
+        if form_instance.is_valid():
+            form_instance.save()
+            return redirect('shop:category')
+        else:
+            context={'form':form_instance}
+            return render(request,'Addproducts.html',context)
+
+class Addcategoryview(View):
+    def get(self,request):
+        form_instance=AddcategoryForm()
+        context={'form':form_instance}
+        return render(request,"Addcategory.html",context)
+    def post(self,request):
+        form_instance=AddcategoryForm(request.POST,request.FILES)
+        if form_instance.is_valid():
+            form_instance.save()
+            return redirect('shop:category')
+        else:
+            context={'form':form_instance}
+            return render(request,'Addcategory.html',context)
+
+class Addstockview(View):
+    def get(self,request,i):
+        p=Product.objects.get(id=i)
+        form_instance=AddstockForm(instance=p)
+        context={'form':form_instance}
+        return render(request,'Addstock.html',context)
+    def post(self,request,i):
+        p=Product.objects.get(id=i)
+        form_instance=AddstockForm(request.POST,instance=p)
+        if form_instance.is_valid():
+            form_instance.save()
+            return redirect('shop:category')
