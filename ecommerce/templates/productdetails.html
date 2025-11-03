@@ -34,7 +34,7 @@
 					<a class="btn hvr-hover mt-5" href="{% url 'shop:addstock' product.id %}">ADD STOCK</a>
                     {% else %}
                     {% if product.stock > 0 %}
-                    <a class="btn hvr-hover mt-5" href="#">ADD TO CART</a>
+                    <a class="btn hvr-hover mt-5" href="{% url 'cart:addtocart' product.id %}">ADD TO CART</a>
                     {% else %}
                     <h3 class="text-danger">Out of stock</h3>
                     {% endif %}
